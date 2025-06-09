@@ -20,6 +20,9 @@ Frontend → API Gateway → [Auth | Permission | Core | Notification | Document
           (8000)       (8001)  (8002)     (8003)    (8004)        (8005)                + MinIO
 ```
 
+![image](https://github.com/user-attachments/assets/1e526b19-e303-4416-a6b1-16540276ed47)
+
+
 ### **Docker Compose Architecture**
 
 **All microservices run in Docker containers:**
