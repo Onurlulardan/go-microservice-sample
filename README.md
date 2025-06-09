@@ -20,6 +20,25 @@ Frontend → API Gateway → [Auth | Permission | Core | Notification | Document
           (8000)       (8001)  (8002)     (8003)    (8004)        (8005)                + MinIO
 ```
 
+### **Docker Compose Architecture**
+
+**All microservices run in Docker containers:**
+
+- **PostgreSQL Database** - Main database (shared by all services)
+- **MinIO Object Storage** - File storage (for Document Service)
+- **API Gateway** - Port 8000 - Main entry point
+- **Auth Service** - Port 8001 - Authentication
+- **Permission Service** - Port 8002 - Authorization
+- **Core Service** - Port 8003 - Business logic
+- **Notification Service** - Port 8004 - Notifications
+- **Document Service** - Port 8005 - File management
+
+**Container Network:**
+
+- All services run in the same Docker network
+- Inter-service communication uses container names
+- Only API Gateway is exposed to external world (port 8000)
+
 ## 🚀 Services
 
 ### 1. **API Gateway** _(Port: 8000)_
@@ -289,7 +308,6 @@ RATE_LIMIT_BLOCK_DURATION_MINUTES=15 # 15 minute block duration
 **PostgreSQL** with shared database model:
 
 - **UUID** primary keys
-- **Soft delete** pattern (status field)
 - **GORM** ORM usage
 - **Automatic migrations**
 
@@ -311,19 +329,28 @@ RATE_LIMIT_BLOCK_DURATION_MINUTES=15 # 15 minute block duration
 
 ```bash
 cp .env.example .env
-# Configure PostgreSQL connection
+# Configure environment variables required to run all services with Docker Compose
 ```
 
-### 2. **Database Setup**
+### 2. **Start with Docker Compose**
 
 ```bash
+# Start all services with Docker Compose (PostgreSQL + All Microservices)
+make docker-up
+
+# Or build and start
+make docker-rebuild
+```
+
+### 3. **Database Setup & Seeding**
+
+```bash
+# Database migration and seed data (Docker environment)
+make docker-fresh
+
+# Or for local development
 make fresh          # Database reset + seed data
-```
-
-### 3. **Start Services**
-
-```bash
-make dev           # Start all services
+make seed          # Seed data only
 ```
 
 ### 4. **Test**
@@ -331,6 +358,7 @@ make dev           # Start all services
 ```bash
 # Login
 curl -X POST http://localhost:8000/api/auth/login \
+  -H "Content-Type: application/json" \
   -d '{"email":"admin@forgecrud.com","password":"admin123"}'
 
 # List users (token required)
@@ -423,6 +451,72 @@ GET /api/users?filters[status]=ACTIVE&filters[organization_id]=12345&page=1&limi
 GET /api/users?search=john&sort[field]=created_at&sort[order]=desc&page=2&limit=5
 ```
 
+## 🐳 Docker Development Environment
+
+### **Container Management**
+
+```bash
+# Start all containers
+make docker-up
+
+# Restart specific container
+make docker-restart-service SERVICE=api-gateway
+
+# Check container status
+make docker-status
+
+# Connect to running containers
+docker-compose exec api-gateway sh
+docker-compose exec postgres psql -U postgres -d forgecrud
+```
+
+### **Volume Management**
+
+```bash
+# Delete PostgreSQL data (for fresh start)
+make docker-clean
+
+# Only stop containers, keep volumes
+make docker-down
+```
+
+### **Environment Variables**
+
+**Important environment variables for Docker Compose:**
+
+```env
+# Database
+POSTGRES_HOST=postgres          # Container name
+POSTGRES_PORT=5432
+POSTGRES_DB=forgecrud
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=postgres123
+
+# MinIO
+MINIO_ENDPOINT=minio:9000      # Container name
+MINIO_ACCESS_KEY=minioadmin
+MINIO_SECRET_KEY=minioadmin
+
+# Service URLs (container network)
+AUTH_SERVICE_URL=http://auth-service:8001
+PERMISSION_SERVICE_URL=http://permission-service:8002
+CORE_SERVICE_URL=http://core-service:8003
+```
+
+### **Troubleshooting**
+
+```bash
+# Clean all containers and restart
+make docker-clean
+make docker-up
+
+# For database connection issues
+make docker-logs-service SERVICE=postgres
+
+# Detailed service log inspection
+make docker-logs-service SERVICE=api-gateway
+```
+
 **Date Range Filter (Auth Service):**
 
 ```
@@ -436,100 +530,46 @@ GET /api/auth/login-history?filters[from_date]=2025-05-01&filters[to_date]=2025-
 - **Auth Service:** `/api/auth/sessions`, `/api/auth/login-history`
 - **Notification Service:** `/api/notifications`
 
-### **Key Features**
-
-- **Ant Design Compatible** - Works seamlessly with frontend data tables
-- **Granular Filtering** - Filter on multiple fields simultaneously
-- **Field-based Sorting** - Sort on any allowed field with direction control
-- **Flexible Search** - Search across multiple relevant fields per endpoint
-- **Standardized Across Services** - Same format for all microservices
-
 ## 🔧 Development Commands
 
-### **Core Commands:**
+### **Local Development:**
 
 ```bash
-# Start all services in development mode
-make dev
-# Starts: API Gateway (8000) → Auth (8001) → Permission (8002) → Core (8003) → Notification (8004)
-# Each service runs in background with automatic restart on code changes
-# Services start sequentially with 1-second delays for proper initialization
-
-# Stop all running services
-make stop
-# Kills all Go processes running main.go files
-# Terminates processes on ports 8000-8005
-# Cleans up PID files and temporary resources
-
-# Get help with all available commands
-make help
-# Displays detailed command descriptions and usage examples
+make dev        # Start all services locally
+make stop       # Stop all local services
+make status     # Check health of all services
 ```
 
-### **Database Commands:**
+### **Database:**
 
 ```bash
-# Reset database and populate with fresh seed data
-make fresh
-# Step 1: Drops all existing tables and data
-# Step 2: Recreates database schema with GORM migrations
-# Step 3: Inserts seed data (admin user, default roles, permissions)
-# Perfect for clean development environment setup
-
-# Add seed data to existing database
-make seed
-# Populates database with:
-# - Default admin user (admin@forgecrud.com / admin123)
-# - System roles (Super Admin, Admin, User)
-# - Base permissions and resources
-# - Sample organizations
-
-# Reset database structure only (no seed data)
-make reset-db
-# Drops all tables and recreates empty schema
-# Useful when you want to manually populate data
+make fresh      # Reset DB + seed data
+make seed       # Add seed data only
+make reset-db   # Reset database structure only
 ```
 
-### **Utility Commands:**
+### **Docker:**
 
 ```bash
-# Generate Swagger documentation
-make swagger
-# Runs the generate_swagger.sh script
-# Creates central Swagger documentation for all microservices
-# Access Swagger UI at: http://localhost:8000/swagger/index.html
-
-# Clean temporary files and processes
-make clean
-# Removes .pids/ directory
-# Cleans build artifacts
-# Resets development environment state
+make docker-build              # Build Docker images
+make docker-up                 # Start all containers
+make docker-down               # Stop all containers
+make docker-rebuild            # Rebuild and restart
+make docker-logs               # Follow all logs
+make docker-logs-service       # Follow specific service logs
+make docker-status             # Check container status
+make docker-restart            # Restart all containers
+make docker-restart-service    # Restart specific container
+make docker-clean              # Clean volumes and restart fresh
+make docker-fresh              # Fresh database seed in Docker
 ```
 
-### **Development Workflow:**
+### **Utility:**
 
-1. **Initial Setup:**
-
-   ```bash
-   make fresh    # Clean database with seed data
-   make dev      # Start all services
-   ```
-
-2. **Daily Development:**
-
-   ```bash
-   make dev      # Start services (if not running)
-   # Code, test, repeat...
-   make stop     # Stop when done
-   ```
-
-3. **Database Issues:**
-
-   ```bash
-   make stop     # Stop services first
-   make fresh    # Reset everything
-   make dev      # Restart services
-   ```
+```bash
+make swagger    # Generate Swagger documentation
+make clean      # Clean temporary files
+```
 
 ## 🏢 Service Ports
 
@@ -562,7 +602,6 @@ make clean
 ✅ **Granular Permissions**  
 ✅ **Global Rate Limiting**  
 ✅ **Auth-specific Rate Limiting**  
-✅ **Soft Delete Pattern**  
 ✅ **Standardized Pagination**  
 ✅ **Session Management**  
 ✅ **Login History Tracking**  
