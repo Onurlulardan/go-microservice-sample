@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>👤 User Action Notification - ForgeCRUD</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        .container {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            border-left: 6px solid #007bff;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        .action-icon {
+            font-size: 64px;
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+        .title {
+            color: #007bff;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .content {
+            background: #f0f8ff;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #b8daff;
+            margin: 20px 0;
+        }
+        .action-details {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+            border-left: 3px solid #007bff;
+        }
+        .user-info {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+        .footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e9ecef;
+            text-align: center;
+            color: #6c757d;
+            font-size: 14px;
+        }
+        .priority {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .priority-high { background: #ffebee; color: #c62828; }
+        .priority-medium { background: #fff3e0; color: #ef6c00; }
+        .priority-low { background: #e8f5e8; color: #2e7d32; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">🔧 ForgeCRUD</div>
+            <div class="action-icon">👤</div>
+            <h1 class="title">USER ACTION NOTIFICATION</h1>
+        </div>
+
+        <div class="content">
+            <p><strong>Hello {{.AdminName}},</strong></p>
+            
+            <p>An important user action has occurred in the system:</p>
+            
+            <div class="user-info">
+                <strong>👤 User Information:</strong><br>
+                <strong>Full Name:</strong> {{.UserName}}<br>
+                <strong>Email:</strong> {{.UserEmail}}<br>
+                <strong>Role:</strong> {{.UserRole}}<br>
+                <strong>IP Address:</strong> {{.IPAddress}}
+            </div>
+
+            <div class="action-details">
+                <strong>🎯 Action Details:</strong><br>
+                <strong>Action:</strong> {{.ActionType}}<br>
+                <strong>Resource:</strong> {{.ResourceName}}<br>
+                <strong>Time:</strong> {{.Timestamp}}<br>
+                <strong>Status:</strong> {{.Status}}<br>
+                <span class="priority priority-{{.Priority}}">{{.PriorityText}}</span>
+            </div>
+
+            {{if .Description}}
+            <p><strong>📝 Description:</strong></p>
+            <p>{{.Description}}</p>
+            {{end}}
+
+            {{if .Changes}}
+            <p><strong>🔄 Changes Made:</strong></p>
+            <ul>
+                {{range .Changes}}
+                <li><strong>{{.Field}}:</strong> {{.OldValue}} → {{.NewValue}}</li>
+                {{end}}
+            </ul>
+            {{end}}
+
+            {{if .RequiresAttention}}
+            <div style="background: #fff3cd; padding: 15px; border-radius: 6px; border-left: 3px solid #ffc107; margin: 15px 0;">
+                <strong>⚠️ Attention:</strong> This action may require manual review.
+            </div>
+            {{end}}
+        </div>
+
+        <div class="footer">
+            <p>This is an automated system notification.</p>
+            <p><strong>ForgeCRUD Audit System</strong></p>
+            <p>{{.Timestamp}}</p>
+        </div>
+    </div>
+</body>
+</html>

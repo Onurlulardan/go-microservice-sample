@@ -1,0 +1,238 @@
+version: "3"
+
+###############################################################################
+# Common environment variables (used only as YAML anchor)
+###############################################################################
+x-common-env: &common-env
+  DB_HOST: postgres
+  DB_PORT: ${DB_PORT:-5432}
+  DB_USER: ${DB_USER:-postgres}
+  DB_PASSWORD: ${DB_PASSWORD:-0ZzfqAxK}
+  DB_NAME: ${DB_NAME:-forgecrud}
+  DB_SSLMODE: ${DB_SSLMODE:-disable}
+  REDIS_HOST: redis
+  REDIS_PORT: ${REDIS_PORT:-6379}
+  REDIS_PASSWORD: ${REDIS_PASSWORD:-0ZzfqAxK}
+
+###############################################################################
+# External Dependencies
+###############################################################################
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: forgecrud_postgres
+    environment:
+      POSTGRES_DB: ${DB_NAME:-forgecrud}
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-0ZzfqAxK}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB -h 127.0.0.1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - forgecrud_network
+
+  redis:
+    image: redis:7-alpine
+    container_name: forgecrud_redis
+    command: >
+      redis-server --requirepass "$$REDIS_PASSWORD"
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "$$REDIS_PASSWORD", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - forgecrud_network
+
+  minio:
+    image: minio/minio:latest
+    container_name: forgecrud_minio
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-minioadmin}
+      MINIO_SERVER_URL: http://minio:9000
+      MINIO_USE_SSL: "false"
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio_data:/data
+    command: server /data --console-address ":9001"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - forgecrud_network
+
+###############################################################################
+# Microservices
+###############################################################################
+  api-gateway:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        SERVICE_NAME: api-gateway
+    container_name: forgecrud_api_gateway
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    environment:
+      <<: *common-env
+      AUTH_SERVICE_URL: http://auth-service:8001
+      PERMISSION_SERVICE_URL: http://permission-service:8002
+      CORE_SERVICE_URL: http://core-service:8003
+      NOTIFICATION_SERVICE_URL: http://notification-service:8004
+      DOCUMENT_SERVICE_URL: http://document-service:8005
+    depends_on:
+      postgres: { condition: service_healthy }
+      redis:    { condition: service_healthy }
+    restart: unless-stopped
+    networks:
+      - forgecrud_network
+
+  auth-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        SERVICE_NAME: auth-service
+    container_name: forgecrud_auth_service
+    ports:
+      - "8001:8001"
+    env_file:
+      - .env
+    environment:
+      <<: *common-env
+    depends_on:
+      postgres: { condition: service_healthy }
+      redis:    { condition: service_healthy }
+    restart: unless-stopped
+    networks:
+      - forgecrud_network
+
+  permission-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        SERVICE_NAME: permission-service
+    container_name: forgecrud_permission_service
+    ports:
+      - "8002:8002"
+    env_file:
+      - .env
+    environment:
+      <<: *common-env
+    depends_on:
+      postgres: { condition: service_healthy }
+      redis:    { condition: service_healthy }
+    restart: unless-stopped
+    networks:
+      - forgecrud_network
+
+  core-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        SERVICE_NAME: core-service
+    container_name: forgecrud_core_service
+    ports:
+      - "8003:8003"
+    env_file:
+      - .env
+    environment:
+      <<: *common-env
+    depends_on:
+      postgres: { condition: service_healthy }
+    restart: unless-stopped
+    networks:
+      - forgecrud_network
+
+  notification-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        SERVICE_NAME: notification-service
+    container_name: forgecrud_notification_service
+    ports:
+      - "8004:8004"
+    env_file:
+      - .env
+    environment:
+      <<: *common-env
+    depends_on:
+      postgres: { condition: service_healthy }
+    restart: unless-stopped
+    networks:
+      - forgecrud_network
+
+  document-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        SERVICE_NAME: document-service
+    container_name: forgecrud_document_service
+    ports:
+      - "8005:8005"
+    env_file:
+      - .env
+    environment:
+      <<: *common-env
+      MINIO_SERVER_URL: http://minio:9000
+      MINIO_USE_SSL: "false"
+    depends_on:
+      postgres: { condition: service_healthy }
+      minio:    { condition: service_healthy }
+    restart: unless-stopped
+    networks:
+      - forgecrud_network
+
+###############################################################################
+# Database seeding service  (runs manually via `make docker-fresh`)
+###############################################################################
+  db-seed:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        SERVICE_NAME: core-service   
+    container_name: forgecrud_db_seed
+    env_file:
+      - .env
+    environment:
+      <<: *common-env
+    command: ["/seed"]
+    depends_on:
+      postgres: { condition: service_healthy }
+    networks:
+      - forgecrud_network
+    restart: "no"
+
+###############################################################################
+# Persistent data & network
+###############################################################################
+volumes:
+  postgres_data:
+  redis_data:
+  minio_data:
+
+networks:
+  forgecrud_network:
+    driver: bridge

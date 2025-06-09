@@ -1,0 +1,4784 @@
+basePath: /api
+definitions:
+  forgecrud-backend_auth-service_handlers.PaginationResponse:
+    properties:
+      current_page:
+        type: integer
+      per_page:
+        type: integer
+      total_items:
+        type: integer
+      total_pages:
+        type: integer
+    type: object
+  forgecrud-backend_core-service_handlers.PaginationResponse:
+    properties:
+      current_page:
+        type: integer
+      per_page:
+        type: integer
+      total_items:
+        type: integer
+      total_pages:
+        type: integer
+    type: object
+  forgecrud-backend_permission-service_handlers.PaginationResponse:
+    properties:
+      current_page:
+        type: integer
+      per_page:
+        type: integer
+      total_items:
+        type: integer
+      total_pages:
+        type: integer
+    type: object
+  gin.H:
+    additionalProperties: {}
+    type: object
+  handlers.Action:
+    properties:
+      created_at:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      slug:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  handlers.ActionListResponse:
+    properties:
+      data:
+        properties:
+          items:
+            items:
+              $ref: '#/definitions/handlers.ActionResponse'
+            type: array
+          pagination:
+            $ref: '#/definitions/forgecrud-backend_permission-service_handlers.PaginationResponse'
+        type: object
+      success:
+        type: boolean
+    type: object
+  handlers.ActionResponse:
+    properties:
+      created_at:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      slug:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  handlers.BatchPermissionCheckRequest:
+    properties:
+      checks:
+        items:
+          $ref: '#/definitions/handlers.ResourceActionCheck'
+        minItems: 1
+        type: array
+      user_id:
+        type: string
+    required:
+    - checks
+    - user_id
+    type: object
+  handlers.BatchPermissionCheckResponse:
+    properties:
+      results:
+        additionalProperties:
+          type: boolean
+        type: object
+    type: object
+  handlers.BlacklistRequest:
+    properties:
+      token:
+        type: string
+    required:
+    - token
+    type: object
+  handlers.ChangePasswordRequest:
+    properties:
+      confirm_password:
+        type: string
+      current_password:
+        type: string
+      new_password:
+        minLength: 8
+        type: string
+    required:
+    - confirm_password
+    - current_password
+    - new_password
+    type: object
+  handlers.CopyDocumentRequest:
+    properties:
+      target_folder_id:
+        type: string
+    required:
+    - target_folder_id
+    type: object
+  handlers.CreateActionRequest:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+      slug:
+        type: string
+    required:
+    - name
+    type: object
+  handlers.CreateFolderRequest:
+    properties:
+      name:
+        type: string
+      owner_id:
+        type: string
+      owner_type:
+        type: string
+      parent_id:
+        type: string
+    required:
+    - name
+    - owner_id
+    - owner_type
+    type: object
+  handlers.CreateOrganizationRequest:
+    properties:
+      name:
+        type: string
+      owner_id:
+        type: string
+      parent_id:
+        type: string
+      slug:
+        type: string
+      status:
+        type: string
+    required:
+    - name
+    - owner_id
+    - slug
+    type: object
+  handlers.CreatePermissionRequest:
+    properties:
+      action_ids:
+        items:
+          type: string
+        minItems: 1
+        type: array
+      organization_id:
+        type: string
+      resource_id:
+        type: string
+      role_id:
+        type: string
+      target:
+        enum:
+        - USER
+        - ROLE
+        - ORGANIZATION
+        type: string
+      user_id:
+        type: string
+    required:
+    - action_ids
+    - resource_id
+    - target
+    type: object
+  handlers.CreateResourceRequest:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+      slug:
+        type: string
+    required:
+    - name
+    type: object
+  handlers.CreateRoleRequest:
+    properties:
+      description:
+        type: string
+      is_default:
+        type: boolean
+      name:
+        type: string
+      organization_id:
+        type: string
+    required:
+    - name
+    type: object
+  handlers.CreateUserRequest:
+    properties:
+      avatar:
+        type: string
+      email:
+        type: string
+      first_name:
+        type: string
+      last_name:
+        type: string
+      organization_id:
+        type: string
+      password:
+        minLength: 6
+        type: string
+      phone:
+        type: string
+      role_id:
+        type: string
+    required:
+    - email
+    - first_name
+    - last_name
+    - password
+    type: object
+  handlers.CreateVerificationTokenRequest:
+    properties:
+      email:
+        type: string
+    required:
+    - email
+    type: object
+  handlers.CreateVerificationTokenResponse:
+    properties:
+      first_name:
+        type: string
+      token:
+        type: string
+    type: object
+  handlers.ForgotPasswordRequest:
+    properties:
+      email:
+        type: string
+    required:
+    - email
+    type: object
+  handlers.LoginHistoryListResponse:
+    properties:
+      data:
+        properties:
+          items:
+            items:
+              $ref: '#/definitions/handlers.LoginHistoryResponse'
+            type: array
+          pagination:
+            $ref: '#/definitions/forgecrud-backend_auth-service_handlers.PaginationResponse'
+        type: object
+      success:
+        type: boolean
+    type: object
+  handlers.LoginHistoryResponse:
+    properties:
+      created_at:
+        type: string
+      device_info:
+        type: string
+      failure_type:
+        type: string
+      id:
+        type: string
+      ip_address:
+        type: string
+      location:
+        type: string
+      successful:
+        type: boolean
+    type: object
+  handlers.LoginRequest:
+    properties:
+      email:
+        example: admin@forgecrud.com
+        type: string
+      password:
+        example: admin123
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  handlers.LoginResponse:
+    properties:
+      expires_at:
+        type: string
+      refresh_token:
+        type: string
+      token:
+        type: string
+      user:
+        $ref: '#/definitions/handlers.UserInfo'
+    type: object
+  handlers.MoveDocumentRequest:
+    properties:
+      target_folder_id:
+        type: string
+    required:
+    - target_folder_id
+    type: object
+  handlers.MoveFolderRequest:
+    properties:
+      target_parent_id:
+        type: string
+    type: object
+  handlers.OrganizationListResponse:
+    properties:
+      data:
+        properties:
+          items:
+            items:
+              $ref: '#/definitions/handlers.OrganizationResponse'
+            type: array
+          pagination:
+            $ref: '#/definitions/forgecrud-backend_core-service_handlers.PaginationResponse'
+        type: object
+      success:
+        type: boolean
+    type: object
+  handlers.OrganizationResponse:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      owner_id:
+        type: string
+      parent_id:
+        type: string
+      slug:
+        type: string
+      status:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  handlers.PasswordResetEmailRequest:
+    properties:
+      name:
+        type: string
+      reset_code:
+        type: string
+      to:
+        type: string
+    required:
+    - name
+    - reset_code
+    - to
+    type: object
+  handlers.Permission:
+    properties:
+      actions:
+        items:
+          $ref: '#/definitions/handlers.Action'
+        type: array
+      created_at:
+        type: string
+      id:
+        type: string
+      organization_id:
+        type: string
+      resource:
+        $ref: '#/definitions/handlers.Resource'
+      resource_id:
+        type: string
+      role_id:
+        type: string
+      target:
+        type: string
+      updated_at:
+        type: string
+      user_id:
+        type: string
+    type: object
+  handlers.PermissionCheckRequest:
+    properties:
+      action_slug:
+        type: string
+      resource_slug:
+        type: string
+      user_id:
+        type: string
+    required:
+    - action_slug
+    - resource_slug
+    - user_id
+    type: object
+  handlers.PermissionCheckResponse:
+    properties:
+      allowed:
+        type: boolean
+      reason:
+        type: string
+    type: object
+  handlers.PermissionListResponse:
+    properties:
+      data:
+        properties:
+          items:
+            items:
+              $ref: '#/definitions/handlers.Permission'
+            type: array
+          pagination:
+            $ref: '#/definitions/forgecrud-backend_permission-service_handlers.PaginationResponse'
+        type: object
+      success:
+        type: boolean
+    type: object
+  handlers.RefreshRequest:
+    properties:
+      refresh_token:
+        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        type: string
+    required:
+    - refresh_token
+    type: object
+  handlers.RefreshResponse:
+    properties:
+      expires_at:
+        example: "2025-06-02T19:37:11.076935+03:00"
+        type: string
+      refresh_token:
+        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        type: string
+      token:
+        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+        type: string
+    type: object
+  handlers.RegisterRequest:
+    properties:
+      email:
+        example: user@example.com
+        type: string
+      first_name:
+        example: John
+        type: string
+      last_name:
+        example: Doe
+        type: string
+      password:
+        example: securepassword123
+        minLength: 8
+        type: string
+    required:
+    - email
+    - first_name
+    - last_name
+    - password
+    type: object
+  handlers.ResendVerificationRequest:
+    properties:
+      email:
+        type: string
+    required:
+    - email
+    type: object
+  handlers.ResetPasswordRequest:
+    properties:
+      confirm_password:
+        type: string
+      new_password:
+        minLength: 8
+        type: string
+      token:
+        type: string
+    required:
+    - confirm_password
+    - new_password
+    - token
+    type: object
+  handlers.Resource:
+    properties:
+      created_at:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      slug:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  handlers.ResourceActionCheck:
+    properties:
+      action_slug:
+        type: string
+      resource_slug:
+        type: string
+    required:
+    - action_slug
+    - resource_slug
+    type: object
+  handlers.ResourceListResponse:
+    properties:
+      data:
+        properties:
+          items:
+            items:
+              $ref: '#/definitions/handlers.ResourceResponse'
+            type: array
+          pagination:
+            $ref: '#/definitions/forgecrud-backend_permission-service_handlers.PaginationResponse'
+        type: object
+      success:
+        type: boolean
+    type: object
+  handlers.ResourceResponse:
+    properties:
+      created_at:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      slug:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  handlers.RoleListResponse:
+    properties:
+      data:
+        properties:
+          items:
+            items:
+              $ref: '#/definitions/handlers.RoleResponse'
+            type: array
+          pagination:
+            $ref: '#/definitions/forgecrud-backend_core-service_handlers.PaginationResponse'
+        type: object
+      success:
+        type: boolean
+    type: object
+  handlers.RoleResponse:
+    properties:
+      created_at:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      is_default:
+        type: boolean
+      name:
+        type: string
+      organization:
+        $ref: '#/definitions/models.Organization'
+      organization_id:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  handlers.SendMessageRequest:
+    properties:
+      message:
+        $ref: '#/definitions/notification.WebSocketMessage'
+      user_id:
+        type: string
+    required:
+    - message
+    - user_id
+    type: object
+  handlers.SessionListResponse:
+    properties:
+      data:
+        properties:
+          items:
+            items:
+              $ref: '#/definitions/handlers.SessionResponse'
+            type: array
+          pagination:
+            $ref: '#/definitions/forgecrud-backend_auth-service_handlers.PaginationResponse'
+        type: object
+      success:
+        type: boolean
+    type: object
+  handlers.SessionResponse:
+    properties:
+      created_at:
+        type: string
+      device_info:
+        type: string
+      id:
+        type: string
+      ip_address:
+        type: string
+      is_current_session:
+        type: boolean
+      last_used_at:
+        type: string
+    type: object
+  handlers.SingleActionResponse:
+    properties:
+      data:
+        $ref: '#/definitions/handlers.ActionResponse'
+      success:
+        type: boolean
+    type: object
+  handlers.SingleOrganizationResponse:
+    properties:
+      data:
+        $ref: '#/definitions/handlers.OrganizationResponse'
+      success:
+        type: boolean
+    type: object
+  handlers.SinglePermissionResponse:
+    properties:
+      data:
+        $ref: '#/definitions/handlers.Permission'
+      success:
+        type: boolean
+    type: object
+  handlers.SingleResourceResponse:
+    properties:
+      data:
+        $ref: '#/definitions/handlers.ResourceResponse'
+      success:
+        type: boolean
+    type: object
+  handlers.SingleRoleResponse:
+    properties:
+      data:
+        $ref: '#/definitions/handlers.RoleResponse'
+      success:
+        type: boolean
+    type: object
+  handlers.SingleUserResponse:
+    properties:
+      data:
+        $ref: '#/definitions/handlers.UserResponse'
+      success:
+        type: boolean
+    type: object
+  handlers.SuccessResponse:
+    properties:
+      message:
+        type: string
+      success:
+        type: boolean
+    type: object
+  handlers.UpdateActionRequest:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+      slug:
+        type: string
+    type: object
+  handlers.UpdateFolderRequest:
+    properties:
+      name:
+        type: string
+    required:
+    - name
+    type: object
+  handlers.UpdateOrganizationRequest:
+    properties:
+      name:
+        type: string
+      owner_id:
+        type: string
+      parent_id:
+        type: string
+      slug:
+        type: string
+      status:
+        type: string
+    type: object
+  handlers.UpdatePermissionRequest:
+    properties:
+      action_ids:
+        items:
+          type: string
+        type: array
+      organization_id:
+        type: string
+      resource_id:
+        type: string
+      role_id:
+        type: string
+      target:
+        type: string
+      user_id:
+        type: string
+    type: object
+  handlers.UpdateResourceRequest:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+      slug:
+        type: string
+    type: object
+  handlers.UpdateRoleRequest:
+    properties:
+      description:
+        type: string
+      is_default:
+        type: boolean
+      name:
+        type: string
+      organization_id:
+        type: string
+    type: object
+  handlers.UpdateUserRequest:
+    properties:
+      avatar:
+        type: string
+      email:
+        type: string
+      first_name:
+        type: string
+      last_name:
+        type: string
+      organization_id:
+        type: string
+      phone:
+        type: string
+      role_id:
+        type: string
+      status:
+        type: string
+    type: object
+  handlers.UserInfo:
+    properties:
+      email:
+        type: string
+      first_name:
+        type: string
+      id:
+        type: string
+      last_name:
+        type: string
+      organization_id:
+        type: string
+      role_id:
+        type: string
+      role_name:
+        type: string
+      status:
+        type: string
+    type: object
+  handlers.UserListResponse:
+    properties:
+      data:
+        properties:
+          items:
+            items:
+              $ref: '#/definitions/handlers.UserResponse'
+            type: array
+          pagination:
+            $ref: '#/definitions/forgecrud-backend_core-service_handlers.PaginationResponse'
+        type: object
+      success:
+        type: boolean
+    type: object
+  handlers.UserResponse:
+    properties:
+      avatar:
+        type: string
+      created_at:
+        type: string
+      email:
+        type: string
+      email_verified:
+        type: boolean
+      first_name:
+        type: string
+      id:
+        type: string
+      last_name:
+        type: string
+      organization:
+        $ref: '#/definitions/models.Organization'
+      phone:
+        type: string
+      role:
+        $ref: '#/definitions/models.Role'
+      status:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  handlers.ValidateRequest:
+    properties:
+      token:
+        type: string
+    required:
+    - token
+    type: object
+  handlers.ValidateResponse:
+    properties:
+      email:
+        type: string
+      expires_at:
+        type: string
+      user_id:
+        type: string
+      valid:
+        type: boolean
+    type: object
+  handlers.VerificationEmailRequest:
+    properties:
+      email:
+        type: string
+      first_name:
+        type: string
+      token:
+        type: string
+    required:
+    - email
+    - first_name
+    - token
+    type: object
+  handlers.WelcomeEmailRequest:
+    properties:
+      name:
+        type: string
+      to:
+        type: string
+      verification_code:
+        type: string
+    required:
+    - name
+    - to
+    - verification_code
+    type: object
+  models.Organization:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+      owner_id:
+        type: string
+      parent_id:
+        type: string
+      slug:
+        type: string
+      status:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  models.Role:
+    properties:
+      created_at:
+        type: string
+      description:
+        type: string
+      id:
+        type: string
+      is_default:
+        type: boolean
+      name:
+        type: string
+      organization:
+        allOf:
+        - $ref: '#/definitions/models.Organization'
+        description: Relations
+      organization_id:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  notification.Notification:
+    properties:
+      action:
+        type: string
+      created_at:
+        type: string
+      data: {}
+      entity:
+        type: string
+      entity_id:
+        type: string
+      id:
+        type: string
+      is_read:
+        type: boolean
+      level:
+        type: string
+      message:
+        type: string
+      read_at:
+        type: string
+      title:
+        type: string
+      type:
+        type: string
+      user_id:
+        type: string
+    type: object
+  notification.WebSocketMessage:
+    properties:
+      action:
+        type: string
+      data: {}
+      entity:
+        type: string
+      entity_id:
+        type: string
+      level:
+        type: string
+      message:
+        type: string
+      timestamp:
+        type: string
+      title:
+        type: string
+      type:
+        type: string
+      user_id:
+        type: string
+    type: object
+  services.EmailRequest:
+    properties:
+      bcc:
+        items:
+          type: string
+        type: array
+      body:
+        type: string
+      cc:
+        items:
+          type: string
+        type: array
+      is_html:
+        type: boolean
+      subject:
+        type: string
+      template_id:
+        type: string
+      template_vars:
+        additionalProperties: true
+        type: object
+      to:
+        items:
+          type: string
+        type: array
+    required:
+    - subject
+    - to
+    type: object
+  services.EmailResponse:
+    properties:
+      message:
+        type: string
+      sent_at:
+        type: string
+      success:
+        type: boolean
+    type: object
+host: localhost:8000
+info:
+  contact:
+    email: support@forgecrud.com
+    name: API Support
+    url: http://www.forgecrud.com/support
+  description: Central API documentation - For all ForgeCRUD microservices
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: ForgeCRUD API
+  version: "1.0"
+paths:
+  /api/notifications/email/password-reset:
+    post:
+      consumes:
+      - application/json
+      description: Send a password reset email with reset code using template
+      parameters:
+      - description: Password reset email request
+        in: body
+        name: email
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.PasswordResetEmailRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/services.EmailResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Send password reset email
+      tags:
+      - email
+  /api/notifications/email/resend-verification:
+    post:
+      consumes:
+      - application/json
+      description: Resend verification email to user after creating new token
+      parameters:
+      - description: Resend verification request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.ResendVerificationRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Resend verification email
+      tags:
+      - email
+  /api/notifications/email/send:
+    post:
+      consumes:
+      - application/json
+      description: Send an email through the notification service
+      parameters:
+      - description: Email request
+        in: body
+        name: email
+        required: true
+        schema:
+          $ref: '#/definitions/services.EmailRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/services.EmailResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Send email
+      tags:
+      - email
+  /api/notifications/email/verification:
+    post:
+      consumes:
+      - application/json
+      description: Send email verification link to user
+      parameters:
+      - description: Verification email request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.VerificationEmailRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Send verification email
+      tags:
+      - email
+  /api/notifications/email/welcome:
+    post:
+      consumes:
+      - application/json
+      description: Send a welcome email with verification code using template
+      parameters:
+      - description: Welcome email request
+        in: body
+        name: email
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.WelcomeEmailRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/services.EmailResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Send welcome/verification email
+      tags:
+      - email
+  /auth/blacklist:
+    post:
+      consumes:
+      - application/json
+      description: Add a JWT token to the blacklist to invalidate it immediately
+      parameters:
+      - description: JWT token to blacklist
+        in: body
+        name: blacklist
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.BlacklistRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Token blacklisted successfully
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Invalid request format
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Invalid or expired token
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Failed to blacklist token
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Blacklist JWT token
+      tags:
+      - auth
+  /auth/change-password:
+    post:
+      consumes:
+      - application/json
+      description: Change user's password after verifying current password
+      parameters:
+      - description: Password change data
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.ChangePasswordRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Password changed successfully
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Invalid request format or validation error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: User not authenticated or incorrect password
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: User not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Failed to update password
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Change password
+      tags:
+      - auth-password
+  /auth/create-verification-token:
+    post:
+      consumes:
+      - application/json
+      description: Create a new verification token for user email verification
+      parameters:
+      - description: Create verification token request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.CreateVerificationTokenRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Verification token created successfully
+          schema:
+            $ref: '#/definitions/handlers.CreateVerificationTokenResponse'
+        "400":
+          description: Invalid request or email already verified
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: User not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Failed to create verification token
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Create verification token
+      tags:
+      - auth
+  /auth/forgot-password:
+    post:
+      consumes:
+      - application/json
+      description: Initiates password reset process by sending a reset link to the
+        user's email
+      parameters:
+      - description: Email for password reset
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.ForgotPasswordRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Password reset email sent
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Invalid request format
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "429":
+          description: Too many password reset attempts
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Failed to process request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Forgot password
+      tags:
+      - auth-password
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticate a user and return JWT tokens
+      parameters:
+      - description: Login credentials
+        in: body
+        name: login
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful login
+          schema:
+            $ref: '#/definitions/handlers.LoginResponse'
+        "400":
+          description: Invalid request format
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Invalid credentials
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "429":
+          description: Too many login attempts
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: User login
+      tags:
+      - auth
+  /auth/login-history:
+    get:
+      consumes:
+      - application/json
+      description: Get login history for the currently authenticated user
+      parameters:
+      - description: 'Page number (default: 1)'
+        in: query
+        name: page
+        type: integer
+      - description: 'Items per page (default: 10)'
+        in: query
+        name: limit
+        type: integer
+      - description: Filter by login success
+        in: query
+        name: filters[successful]
+        type: boolean
+      - description: Filter by date from (YYYY-MM-DD)
+        in: query
+        name: filters[from_date]
+        type: string
+      - description: Filter by date to (YYYY-MM-DD)
+        in: query
+        name: filters[to_date]
+        type: string
+      - description: Sort field (created_at, successful)
+        in: query
+        name: sort[field]
+        type: string
+      - description: Sort order (asc, desc)
+        in: query
+        name: sort[order]
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Login history list
+          schema:
+            $ref: '#/definitions/handlers.LoginHistoryListResponse'
+        "401":
+          description: User not authenticated
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Failed to retrieve login history
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get login history
+      tags:
+      - auth-security
+  /auth/logout:
+    post:
+      consumes:
+      - application/json
+      description: Logout the currently authenticated user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Logged out successfully
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Token required
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Invalid token
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Could not logout
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: User logout
+      tags:
+      - auth
+  /auth/refresh:
+    post:
+      consumes:
+      - application/json
+      description: Refresh an expired JWT token using a valid refresh token
+      parameters:
+      - description: Refresh token
+        in: body
+        name: refresh
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.RefreshRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successfully refreshed tokens
+          schema:
+            $ref: '#/definitions/handlers.RefreshResponse'
+        "400":
+          description: Invalid request format
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Invalid refresh token or user inactive
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Failed to generate new tokens
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Refresh JWT token
+      tags:
+      - auth
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      description: Register a new user account
+      parameters:
+      - description: User registration data
+        in: body
+        name: register
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: User registered successfully
+          schema:
+            $ref: '#/definitions/handlers.LoginResponse'
+        "400":
+          description: Invalid request format or validation error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "409":
+          description: Email already exists
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "429":
+          description: Too many registration attempts
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Failed to register user
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Register new user
+      tags:
+      - auth
+  /auth/reset-password:
+    post:
+      consumes:
+      - application/json
+      description: Reset user's password using a valid reset token
+      parameters:
+      - description: Password reset data with token
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.ResetPasswordRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Password reset successful
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Invalid request format or token
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Failed to update password
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Reset password
+      tags:
+      - auth-password
+  /auth/sessions:
+    get:
+      consumes:
+      - application/json
+      description: Get all active sessions for the currently authenticated user
+      parameters:
+      - description: 'Page number (default: 1)'
+        in: query
+        name: page
+        type: integer
+      - description: 'Items per page (default: 10)'
+        in: query
+        name: limit
+        type: integer
+      - description: Filter by active status
+        in: query
+        name: filters[is_active]
+        type: boolean
+      - description: Sort field (created_at, updated_at, last_used_at)
+        in: query
+        name: sort[field]
+        type: string
+      - description: Sort order (asc, desc)
+        in: query
+        name: sort[order]
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of user sessions
+          schema:
+            $ref: '#/definitions/handlers.SessionListResponse'
+        "401":
+          description: User not authenticated
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Failed to retrieve sessions
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: List user sessions
+      tags:
+      - sessions
+  /auth/sessions/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Terminate a specific user session by ID
+      parameters:
+      - description: Session ID to terminate
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Session terminated successfully
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Session ID is required or invalid format
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: User not authenticated
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Session not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Failed to terminate session
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Terminate session
+      tags:
+      - sessions
+  /auth/sessions/terminate-all:
+    post:
+      consumes:
+      - application/json
+      description: Terminate all active sessions for the current user except the current
+        session
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: All other sessions terminated successfully
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: User not authenticated
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Failed to terminate sessions
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Terminate all sessions
+      tags:
+      - sessions
+  /auth/validate:
+    post:
+      consumes:
+      - application/json
+      description: Validate a JWT token and return its claims
+      parameters:
+      - description: JWT token to validate
+        in: body
+        name: validate
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.ValidateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Token validation result
+          schema:
+            $ref: '#/definitions/handlers.ValidateResponse'
+        "400":
+          description: Invalid request format
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Validate JWT token
+      tags:
+      - auth
+  /auth/verify-email/{token}:
+    get:
+      consumes:
+      - application/json
+      description: Verify user's email using the provided token
+      parameters:
+      - description: Verification token
+        in: path
+        name: token
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Email verified successfully with auth tokens
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid token
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Failed to verify email
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Verify email
+      tags:
+      - auth
+  /documents:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve all documents in a specified folder
+      parameters:
+      - description: Folder ID to list documents from
+        in: query
+        name: folder_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of documents
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Missing or invalid folder_id
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get documents in a folder
+      tags:
+      - documents
+    post:
+      consumes:
+      - multipart/form-data
+      description: Upload a new document to a specified folder
+      parameters:
+      - description: Folder ID where the document will be uploaded
+        in: formData
+        name: folder_id
+        required: true
+        type: string
+      - description: User ID (for testing purposes)
+        in: formData
+        name: user_id
+        type: string
+      - description: Document file to upload
+        in: formData
+        name: file
+        required: true
+        type: file
+      - description: Document tags
+        in: formData
+        name: tags
+        type: string
+      - description: Document description
+        in: formData
+        name: description
+        type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Document uploaded successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid request data
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Folder not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Upload a new document
+      tags:
+      - documents
+  /documents/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a document and all its versions from storage and database
+      parameters:
+      - description: Document ID
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Document deleted successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid document ID format
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Document not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Delete a document
+      tags:
+      - documents
+    get:
+      consumes:
+      - application/json
+      description: Get detailed information about a specific document
+      parameters:
+      - description: Document ID
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Document details
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid document ID format
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Document not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get document by ID
+      tags:
+      - documents
+    put:
+      consumes:
+      - multipart/form-data
+      description: Update document tags and description
+      parameters:
+      - description: Document ID
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Updated document tags
+        in: formData
+        name: tags
+        type: string
+      - description: Updated document description
+        in: formData
+        name: description
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Document updated successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid document ID format
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Document not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Update document metadata
+      tags:
+      - documents
+  /documents/{id}/copy:
+    post:
+      consumes:
+      - application/json
+      description: Copy a document and its latest version to a different folder with
+        automatic naming
+      parameters:
+      - description: Document ID
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Target folder information
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.CopyDocumentRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Document copied successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid request data or document ID format
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Document or target folder not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Copy document to another folder
+      tags:
+      - documents
+  /documents/{id}/download:
+    get:
+      consumes:
+      - application/json
+      description: Download the actual file content of a document
+      parameters:
+      - description: Document ID
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/octet-stream
+      responses:
+        "200":
+          description: Document file content
+          schema:
+            type: file
+        "400":
+          description: Invalid document ID format
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Document not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Server error or storage unavailable
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Download document file
+      tags:
+      - documents
+  /documents/{id}/move:
+    post:
+      consumes:
+      - application/json
+      description: Move a document and all its versions to a different folder
+      parameters:
+      - description: Document ID
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Target folder information
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.MoveDocumentRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Document moved successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid request data or document ID format
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Document or target folder not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Move document to another folder
+      tags:
+      - documents
+  /documents/{id}/versions:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve all versions of a specific document ordered by version
+        number
+      parameters:
+      - description: Document ID
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of document versions
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Document not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get all versions of a document
+      tags:
+      - documents
+    post:
+      consumes:
+      - multipart/form-data
+      description: Upload a new version of an existing document
+      parameters:
+      - description: Document ID
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Document file to upload
+        in: formData
+        name: file
+        required: true
+        type: file
+      - description: User ID (for testing purposes)
+        in: formData
+        name: user_id
+        type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Document version uploaded successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid request data
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Document not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Upload new document version
+      tags:
+      - documents
+  /documents/{id}/versions/latest:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve the most recent version of a specific document
+      parameters:
+      - description: Document ID
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Latest document version
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Document or version not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get latest version of a document
+      tags:
+      - documents
+  /folders:
+    get:
+      consumes:
+      - application/json
+      description: Get all folders with pagination, filtering, sorting and search
+      parameters:
+      - description: 'Page number (default: 1)'
+        in: query
+        name: page
+        type: integer
+      - description: 'Items per page (default: 10)'
+        in: query
+        name: limit
+        type: integer
+      - description: Search term across name and path
+        in: query
+        name: search
+        type: string
+      - description: Filter by owner ID
+        in: query
+        name: filters[owner_id]
+        type: string
+      - description: Filter by owner type (user, organization)
+        in: query
+        name: filters[owner_type]
+        type: string
+      - description: Filter by parent folder ID
+        in: query
+        name: filters[parent_id]
+        type: string
+      - description: Sort field (name, path, created_at, updated_at, file_count, total_size)
+        in: query
+        name: sort[field]
+        type: string
+      - description: Sort order (asc, desc)
+        in: query
+        name: sort[order]
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of folders with pagination
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get all folders
+      tags:
+      - folders
+    post:
+      consumes:
+      - application/json
+      description: Create a new folder with the provided information
+      parameters:
+      - description: Folder information
+        in: body
+        name: folder
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.CreateFolderRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created folder
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid request data
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "409":
+          description: Folder already exists
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Create a new folder
+      tags:
+      - folders
+  /folders/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete an empty folder (folder must not contain any subfolders
+        or documents)
+      parameters:
+      - description: Folder ID
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Folder deleted successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid folder ID format
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Folder not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "409":
+          description: Folder contains subfolders or documents
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Delete a folder
+      tags:
+      - folders
+    get:
+      consumes:
+      - application/json
+      description: Get detailed information about a specific folder
+      parameters:
+      - description: Folder ID
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Folder details
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid folder ID format
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Folder not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get folder by ID
+      tags:
+      - folders
+    put:
+      consumes:
+      - application/json
+      description: Update an existing folder's name
+      parameters:
+      - description: Folder ID
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Updated folder information
+        in: body
+        name: folder
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.UpdateFolderRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Updated folder
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid request data or ID format
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Folder not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "409":
+          description: Folder name conflict
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Update a folder
+      tags:
+      - folders
+  /folders/{id}/contents:
+    get:
+      consumes:
+      - application/json
+      description: Get all subfolders and documents in a specific folder
+      parameters:
+      - description: Folder ID
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Folder contents
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid folder ID format
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Folder not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get folder contents
+      tags:
+      - folders
+  /folders/{id}/download:
+    get:
+      consumes:
+      - application/json
+      description: Download a folder and all its contents as a ZIP archive (recursive)
+      parameters:
+      - description: Folder ID
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/zip
+      responses:
+        "200":
+          description: ZIP archive containing folder contents
+          schema:
+            type: file
+        "400":
+          description: Invalid folder ID format
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Folder not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Download folder as ZIP
+      tags:
+      - folders
+  /folders/{id}/move:
+    post:
+      consumes:
+      - application/json
+      description: Move a folder and all its contents to a different parent folder
+      parameters:
+      - description: Folder ID
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Target parent folder information
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.MoveFolderRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Folder moved successfully
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid request data or folder ID format
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Folder not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "409":
+          description: Folder name conflict or circular dependency
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Move folder to another parent
+      tags:
+      - folders
+  /notifications:
+    get:
+      consumes:
+      - application/json
+      description: Get all notifications for current user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/notification.Notification'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get all notifications
+      tags:
+      - notifications
+    post:
+      consumes:
+      - application/json
+      description: Create a new notification
+      parameters:
+      - description: Notification data
+        in: body
+        name: notification
+        required: true
+        schema:
+          $ref: '#/definitions/notification.Notification'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/notification.Notification'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Create notification
+      tags:
+      - notifications
+  /notifications/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a notification by ID
+      parameters:
+      - description: Notification ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Delete notification
+      tags:
+      - notifications
+    get:
+      consumes:
+      - application/json
+      description: Get a specific notification by ID
+      parameters:
+      - description: Notification ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/notification.Notification'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get notification by ID
+      tags:
+      - notifications
+  /notifications/{id}/read:
+    put:
+      consumes:
+      - application/json
+      description: Mark a notification as read
+      parameters:
+      - description: Notification ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/notification.Notification'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Mark notification as read
+      tags:
+      - notifications
+  /organizations:
+    get:
+      consumes:
+      - application/json
+      description: Get all organizations with pagination, filtering, sorting and search
+      parameters:
+      - description: 'Page number (default: 1)'
+        in: query
+        name: page
+        type: integer
+      - description: 'Items per page (default: 10)'
+        in: query
+        name: limit
+        type: integer
+      - description: Search term across name and slug
+        in: query
+        name: search
+        type: string
+      - description: Filter by status (ACTIVE, INACTIVE)
+        in: query
+        name: filters[status]
+        type: string
+      - description: Filter by owner ID
+        in: query
+        name: filters[owner_id]
+        type: string
+      - description: Filter by parent organization ID
+        in: query
+        name: filters[parent_id]
+        type: string
+      - description: Sort field (name, slug, status, created_at, updated_at)
+        in: query
+        name: sort[field]
+        type: string
+      - description: Sort order (asc, desc)
+        in: query
+        name: sort[order]
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.OrganizationListResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get all organizations
+      tags:
+      - organizations
+    post:
+      consumes:
+      - application/json
+      description: Create a new organization with the provided information
+      parameters:
+      - description: Organization information
+        in: body
+        name: organization
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.CreateOrganizationRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created organization
+          schema:
+            $ref: '#/definitions/handlers.SingleOrganizationResponse'
+        "400":
+          description: Invalid request data or owner/parent not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "409":
+          description: Slug already exists
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Create a new organization
+      tags:
+      - organizations
+  /organizations/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete an organization if it has no child organizations, users,
+        or roles
+      parameters:
+      - description: Organization ID
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success message
+          schema:
+            $ref: '#/definitions/handlers.SuccessResponse'
+        "400":
+          description: Invalid organization ID format
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Organization not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "409":
+          description: Organization has dependencies
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Delete an organization
+      tags:
+      - organizations
+    get:
+      consumes:
+      - application/json
+      description: Get detailed information about a specific organization
+      parameters:
+      - description: Organization ID
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.SingleOrganizationResponse'
+        "400":
+          description: Invalid organization ID format
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Organization not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get organization by ID
+      tags:
+      - organizations
+    put:
+      consumes:
+      - application/json
+      description: Update an existing organization's information
+      parameters:
+      - description: Organization ID
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Updated organization information
+        in: body
+        name: organization
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.UpdateOrganizationRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Updated organization
+          schema:
+            $ref: '#/definitions/handlers.SingleOrganizationResponse'
+        "400":
+          description: Invalid request data or ID format
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Organization not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "409":
+          description: Slug already exists
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Update an organization
+      tags:
+      - organizations
+  /organizations/{id}/permissions:
+    get:
+      consumes:
+      - application/json
+      description: Get all permissions assigned to a specific organization
+      parameters:
+      - description: Organization ID
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Organization permissions data
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid organization ID format
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Organization not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get organization permissions
+      tags:
+      - organizations
+  /permissions:
+    get:
+      consumes:
+      - application/json
+      description: Get all permissions with pagination, filtering, sorting, and search
+      parameters:
+      - description: 'Page number (default: 1)'
+        in: query
+        name: page
+        type: integer
+      - description: 'Results per page (default: 10)'
+        in: query
+        name: limit
+        type: integer
+      - description: Filter by target (USER, ROLE, ORGANIZATION)
+        in: query
+        name: filters[target]
+        type: string
+      - description: Filter by resource ID
+        in: query
+        name: filters[resource_id]
+        type: string
+      - description: Filter by user ID
+        in: query
+        name: filters[user_id]
+        type: string
+      - description: Filter by role ID
+        in: query
+        name: filters[role_id]
+        type: string
+      - description: Filter by organization ID
+        in: query
+        name: filters[organization_id]
+        type: string
+      - description: Sort field (target, created_at, updated_at)
+        in: query
+        name: sort[field]
+        type: string
+      - description: Sort order (asc, desc)
+        in: query
+        name: sort[order]
+        type: string
+      - description: Search term
+        in: query
+        name: search
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of permissions
+          schema:
+            $ref: '#/definitions/handlers.PermissionListResponse'
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get all permissions
+      tags:
+      - permissions
+    post:
+      consumes:
+      - application/json
+      description: Create a new permission with associated actions
+      parameters:
+      - description: Permission data
+        in: body
+        name: permission
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.CreatePermissionRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created permission
+          schema:
+            $ref: '#/definitions/handlers.SinglePermissionResponse'
+        "400":
+          description: Invalid request format or validation error
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Resource or action not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Create a new permission
+      tags:
+      - permissions
+  /permissions/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a permission and its associated actions
+      parameters:
+      - description: Permission ID
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success message
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Invalid permission ID
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Permission not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Delete a permission
+      tags:
+      - permissions
+    get:
+      consumes:
+      - application/json
+      description: Get detailed information about a specific permission
+      parameters:
+      - description: Permission ID
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Permission details
+          schema:
+            $ref: '#/definitions/handlers.SinglePermissionResponse'
+        "400":
+          description: Invalid permission ID
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Permission not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get a permission by ID
+      tags:
+      - permissions
+    put:
+      consumes:
+      - application/json
+      description: Update an existing permission
+      parameters:
+      - description: Permission ID
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Updated permission data
+        in: body
+        name: permission
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.UpdatePermissionRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Updated permission
+          schema:
+            $ref: '#/definitions/handlers.SinglePermissionResponse'
+        "400":
+          description: Invalid request format or validation error
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Permission, resource, or action not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Update a permission
+      tags:
+      - permissions
+  /permissions/actions:
+    get:
+      consumes:
+      - application/json
+      description: Get all actions with pagination, filtering, sorting, and search
+      parameters:
+      - description: 'Page number (default: 1)'
+        in: query
+        name: page
+        type: integer
+      - description: 'Results per page (default: 10)'
+        in: query
+        name: limit
+        type: integer
+      - description: Filter by name
+        in: query
+        name: filters[name]
+        type: string
+      - description: Filter by slug
+        in: query
+        name: filters[slug]
+        type: string
+      - description: Sort field (name, slug, created_at, updated_at)
+        in: query
+        name: sort[field]
+        type: string
+      - description: Sort order (asc, desc)
+        in: query
+        name: sort[order]
+        type: string
+      - description: Search term
+        in: query
+        name: search
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of actions
+          schema:
+            $ref: '#/definitions/handlers.ActionListResponse'
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get all actions
+      tags:
+      - actions
+    post:
+      consumes:
+      - application/json
+      description: Create a new action for permissions
+      parameters:
+      - description: Action data
+        in: body
+        name: action
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.CreateActionRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created action
+          schema:
+            $ref: '#/definitions/handlers.SingleActionResponse'
+        "400":
+          description: Invalid request format
+          schema:
+            additionalProperties: true
+            type: object
+        "409":
+          description: Action with this slug already exists
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Create a new action
+      tags:
+      - actions
+  /permissions/actions/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete an action if it's not being used in any permissions
+      parameters:
+      - description: Action ID
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success message
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Invalid action ID format
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Action not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "409":
+          description: Action is being used in permissions
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Delete an action
+      tags:
+      - actions
+    get:
+      consumes:
+      - application/json
+      description: Get detailed information about a specific action
+      parameters:
+      - description: Action ID
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Action details
+          schema:
+            $ref: '#/definitions/handlers.SingleActionResponse'
+        "400":
+          description: Invalid action ID format
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Action not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get an action by ID
+      tags:
+      - actions
+    put:
+      consumes:
+      - application/json
+      description: Update an existing action's details
+      parameters:
+      - description: Action ID
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Updated action data
+        in: body
+        name: action
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.UpdateActionRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Updated action
+          schema:
+            $ref: '#/definitions/handlers.SingleActionResponse'
+        "400":
+          description: Invalid request format
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Action not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "409":
+          description: Action with this slug already exists
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Update an action
+      tags:
+      - actions
+  /permissions/batch-check:
+    post:
+      consumes:
+      - application/json
+      description: Check multiple resource-action permissions for a user in a single
+        request
+      parameters:
+      - description: Batch permission check request
+        in: body
+        name: batch
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.BatchPermissionCheckRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Batch permission check results
+          schema:
+            $ref: '#/definitions/handlers.BatchPermissionCheckResponse'
+        "400":
+          description: Invalid request format
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Check multiple permissions
+      tags:
+      - permission-checks
+  /permissions/cache/invalidate/{user_id}:
+    post:
+      consumes:
+      - application/json
+      description: Invalidate all cached permissions for a specific user
+      parameters:
+      - description: User ID
+        in: path
+        name: user_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success message
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid user ID
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Failed to invalidate cache
+          schema:
+            additionalProperties: true
+            type: object
+        "503":
+          description: Cache manager not available
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Invalidate user permissions cache
+      tags:
+      - cache
+  /permissions/cache/invalidate/all:
+    post:
+      consumes:
+      - application/json
+      description: Invalidate all cached permissions across the system
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success message
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Failed to invalidate cache
+          schema:
+            additionalProperties: true
+            type: object
+        "503":
+          description: Cache manager not available
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Invalidate all permissions cache
+      tags:
+      - cache
+  /permissions/cache/invalidate/org/{org_id}:
+    post:
+      consumes:
+      - application/json
+      description: Invalidate all cached permissions for a specific organization
+      parameters:
+      - description: Organization ID
+        in: path
+        name: org_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success message
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid organization ID
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Failed to invalidate cache
+          schema:
+            additionalProperties: true
+            type: object
+        "503":
+          description: Cache manager not available
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Invalidate organization permissions cache
+      tags:
+      - cache
+  /permissions/cache/invalidate/role/{role_id}:
+    post:
+      consumes:
+      - application/json
+      description: Invalidate all cached permissions for a specific role
+      parameters:
+      - description: Role ID
+        in: path
+        name: role_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success message
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid role ID
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Failed to invalidate cache
+          schema:
+            additionalProperties: true
+            type: object
+        "503":
+          description: Cache manager not available
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Invalidate role permissions cache
+      tags:
+      - cache
+  /permissions/cache/stats:
+    get:
+      consumes:
+      - application/json
+      description: Get statistics about the permission cache
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Cache statistics
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Failed to get cache stats
+          schema:
+            additionalProperties: true
+            type: object
+        "503":
+          description: Cache manager not available
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get cache statistics
+      tags:
+      - cache
+  /permissions/check:
+    post:
+      consumes:
+      - application/json
+      description: Check if a user has permission for a specific resource and action
+      parameters:
+      - description: Permission check request
+        in: body
+        name: check
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.PermissionCheckRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Permission check result
+          schema:
+            $ref: '#/definitions/handlers.PermissionCheckResponse'
+        "400":
+          description: Invalid request format
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Check single permission
+      tags:
+      - permission-checks
+  /permissions/resources:
+    get:
+      consumes:
+      - application/json
+      description: Get all resources with pagination, filtering, sorting, and search
+      parameters:
+      - description: 'Page number (default: 1)'
+        in: query
+        name: page
+        type: integer
+      - description: 'Results per page (default: 10)'
+        in: query
+        name: limit
+        type: integer
+      - description: Filter by name
+        in: query
+        name: filters[name]
+        type: string
+      - description: Filter by slug
+        in: query
+        name: filters[slug]
+        type: string
+      - description: Sort field (name, slug, created_at, updated_at)
+        in: query
+        name: sort[field]
+        type: string
+      - description: Sort order (asc, desc)
+        in: query
+        name: sort[order]
+        type: string
+      - description: Search term
+        in: query
+        name: search
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of resources
+          schema:
+            $ref: '#/definitions/handlers.ResourceListResponse'
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get all resources
+      tags:
+      - resources
+    post:
+      consumes:
+      - application/json
+      description: Create a new resource for permissions
+      parameters:
+      - description: Resource data
+        in: body
+        name: resource
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.CreateResourceRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created resource
+          schema:
+            $ref: '#/definitions/handlers.SingleResourceResponse'
+        "400":
+          description: Invalid request format
+          schema:
+            additionalProperties: true
+            type: object
+        "409":
+          description: Resource with this slug already exists
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Create a new resource
+      tags:
+      - resources
+  /permissions/resources/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a resource if it's not being used in any permissions
+      parameters:
+      - description: Resource ID
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success message
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Invalid resource ID format
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Resource not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "409":
+          description: Resource is being used in permissions
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Delete a resource
+      tags:
+      - resources
+    get:
+      consumes:
+      - application/json
+      description: Get detailed information about a specific resource
+      parameters:
+      - description: Resource ID
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Resource details
+          schema:
+            $ref: '#/definitions/handlers.SingleResourceResponse'
+        "400":
+          description: Invalid resource ID format
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Resource not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get a resource by ID
+      tags:
+      - resources
+    put:
+      consumes:
+      - application/json
+      description: Update an existing resource's details
+      parameters:
+      - description: Resource ID
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Updated resource data
+        in: body
+        name: resource
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.UpdateResourceRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Updated resource
+          schema:
+            $ref: '#/definitions/handlers.SingleResourceResponse'
+        "400":
+          description: Invalid request format
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Resource not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "409":
+          description: Resource with this slug already exists
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal server error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Update a resource
+      tags:
+      - resources
+  /roles:
+    get:
+      consumes:
+      - application/json
+      description: Get all roles with pagination, filtering, sorting and search
+      parameters:
+      - description: 'Page number (default: 1)'
+        in: query
+        name: page
+        type: integer
+      - description: 'Items per page (default: 10)'
+        in: query
+        name: limit
+        type: integer
+      - description: Search term across name and description
+        in: query
+        name: search
+        type: string
+      - description: Filter by organization ID
+        in: query
+        name: filters[organization_id]
+        type: string
+      - description: Filter by default status (true, false)
+        in: query
+        name: filters[is_default]
+        type: string
+      - description: Sort field (name, description, is_default, created_at, updated_at)
+        in: query
+        name: sort[field]
+        type: string
+      - description: Sort order (asc, desc)
+        in: query
+        name: sort[order]
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.RoleListResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get all roles
+      tags:
+      - roles
+    post:
+      consumes:
+      - application/json
+      description: Create a new role with the provided information
+      parameters:
+      - description: Role information
+        in: body
+        name: role
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.CreateRoleRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created role
+          schema:
+            $ref: '#/definitions/handlers.SingleRoleResponse'
+        "400":
+          description: Invalid request data or organization not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "409":
+          description: Role name already exists
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Create a new role
+      tags:
+      - roles
+  /roles/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a role if it's not being used by any users
+      parameters:
+      - description: Role ID
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success message
+          schema:
+            $ref: '#/definitions/handlers.SuccessResponse'
+        "400":
+          description: Invalid role ID format
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Role not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "409":
+          description: Role is in use
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Delete a role
+      tags:
+      - roles
+    get:
+      consumes:
+      - application/json
+      description: Get detailed information about a specific role
+      parameters:
+      - description: Role ID
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.SingleRoleResponse'
+        "400":
+          description: Invalid role ID format
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Role not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get role by ID
+      tags:
+      - roles
+    put:
+      consumes:
+      - application/json
+      description: Update an existing role's information
+      parameters:
+      - description: Role ID
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Updated role information
+        in: body
+        name: role
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.UpdateRoleRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Updated role
+          schema:
+            $ref: '#/definitions/handlers.SingleRoleResponse'
+        "400":
+          description: Invalid request data or ID format
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Role not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "409":
+          description: Role name already exists
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Update a role
+      tags:
+      - roles
+  /roles/{id}/permissions:
+    get:
+      consumes:
+      - application/json
+      description: Get all permissions assigned to a specific role including role-level
+        and organization-level permissions
+      parameters:
+      - description: Role ID
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Role permissions data
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid role ID format
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Role not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get role permissions
+      tags:
+      - roles
+  /users:
+    get:
+      consumes:
+      - application/json
+      description: Get all users with pagination, filtering, sorting and search
+      parameters:
+      - description: 'Page number (default: 1)'
+        in: query
+        name: page
+        type: integer
+      - description: 'Items per page (default: 10)'
+        in: query
+        name: limit
+        type: integer
+      - description: Search term across name and email
+        in: query
+        name: search
+        type: string
+      - description: Filter by status (ACTIVE, INACTIVE, DELETED)
+        in: query
+        name: filters[status]
+        type: string
+      - description: Filter by organization ID
+        in: query
+        name: filters[organization_id]
+        type: string
+      - description: Filter by role ID
+        in: query
+        name: filters[role_id]
+        type: string
+      - description: Sort field (email, first_name, last_name, created_at, updated_at)
+        in: query
+        name: sort[field]
+        type: string
+      - description: Sort order (asc, desc)
+        in: query
+        name: sort[order]
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.UserListResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get all users
+      tags:
+      - users
+    post:
+      consumes:
+      - application/json
+      description: Create a new user with the provided information
+      parameters:
+      - description: User information
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.CreateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created user
+          schema:
+            $ref: '#/definitions/handlers.SingleUserResponse'
+        "400":
+          description: Invalid request data
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "409":
+          description: Email already exists
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Create a new user
+      tags:
+      - users
+  /users/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Soft delete a user by setting status to DELETED
+      parameters:
+      - description: User ID
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Success message
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Invalid user ID format
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: User not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Delete a user
+      tags:
+      - users
+    get:
+      consumes:
+      - application/json
+      description: Get detailed information about a specific user
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handlers.SingleUserResponse'
+        "400":
+          description: Invalid user ID format
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: User not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get user by ID
+      tags:
+      - users
+    put:
+      consumes:
+      - application/json
+      description: Update an existing user's information
+      parameters:
+      - description: User ID
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Updated user information
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.UpdateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Updated user
+          schema:
+            $ref: '#/definitions/handlers.SingleUserResponse'
+        "400":
+          description: Invalid request data or ID format
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: User not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "409":
+          description: Email already exists
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Update a user
+      tags:
+      - users
+  /users/{id}/permissions:
+    get:
+      consumes:
+      - application/json
+      description: Get all permissions assigned to a specific user including user-level,
+        role-level and organization-level permissions
+      parameters:
+      - description: User ID
+        format: uuid
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: User permissions data
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid user ID format
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Unauthorized
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: User not found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Server error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - BearerAuth: []
+      summary: Get user permissions
+      tags:
+      - users
+  /ws/notifications/{user_id}:
+    get:
+      description: Establish WebSocket connection for real-time notifications
+      parameters:
+      - description: User ID
+        in: path
+        name: user_id
+        required: true
+        type: string
+      responses: {}
+      summary: WebSocket Connection
+      tags:
+      - websocket
+  /ws/send:
+    post:
+      consumes:
+      - application/json
+      description: Send real-time message to specific user via WebSocket
+      parameters:
+      - description: Message payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.SendMessageRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/gin.H'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/gin.H'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/gin.H'
+      summary: Send WebSocket Message
+      tags:
+      - websocket
+schemes:
+- http
+- https
+securityDefinitions:
+  BearerAuth:
+    description: Type "Bearer" followed by a space and the JWT token.
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
+tags:
+- description: Authentication and user session management
+  name: auth
+- description: User management
+  name: users
+- description: Role management
+  name: roles
+- description: Organization management
+  name: organizations
+- description: Permission management
+  name: permissions
+- description: Resource management
+  name: resources
+- description: Action management
+  name: actions
