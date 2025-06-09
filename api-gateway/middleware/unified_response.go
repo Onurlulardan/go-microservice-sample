@@ -107,7 +107,7 @@ func UnifiedResponseMiddleware() gin.HandlerFunc {
 		w.ResponseWriter.WriteHeader(statusCode)
 
 		// Write unified response to the actual response writer
-		json.NewEncoder(w.ResponseWriter).Encode(unified)
+		json.NewEncoder(w).Encode(unified)
 
 		// 🔥 FIRE & FORGET - Async background tasks
 		go saveAuditLogAsync(c, originalResponse, statusCode, requestID, executionTime)
