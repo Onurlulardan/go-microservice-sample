@@ -20,8 +20,8 @@ Frontend → API Gateway → [Auth | Permission | Core | Notification | Document
           (8000)       (8001)  (8002)     (8003)    (8004)        (8005)                + MinIO
 ```
 
-![image](https://github.com/user-attachments/assets/4ae0525b-a8d8-45ac-bb4c-0ed473e0cd47)
 
+![screencapture-mermaid-ink-svg-pako-eNq9WOFu2zYQfhWCQIsNcBLZsmzLGwp4SeYGqJegalFg837QEm1zlUSVpJK4cd59J8mWHVWzSCFYAgSxfPfd3XfH0x2fsM8Disd4JUiyRp-u5vE8RvDjdvv2X3P8WVLx60K8u35UVMQkRBNfcTHHf5dSfZC6-g1NgojFyPMFS5TMNKa8lJLpooB3u10HxEswbyMVjWQpuIPsg](https://github.com/user-attachments/assets/603a13bc-f30d-4564-917e-f05eb69de6c6)
 
 
 ### **Docker Compose Architecture**
